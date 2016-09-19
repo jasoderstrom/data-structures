@@ -1,0 +1,129 @@
+
+/*Justin Soderstrom
+  CSC-300
+  September 2, 2015
+*/
+#include <stdio.h>
+
+#define MaxList 50 
+
+struct listtype
+{
+	 int L[MaxList] = {0};
+	 int last = 0;          // next free spot in list
+
+};
+
+typdef struct
+void insertEnd( int L[], int *last, int x )
+{
+	L[*last] = x;
+	(*last)++;
+}
+
+void insertFront( int L[], int *last, int x )
+{
+	int i = 0;
+
+	for(i=*last; i>=0; i--)
+	{
+		L[i+1] = L[i]; 
+	}
+
+	L[0] = x;
+	(*last)++;
+}
+
+int isEmpty( int L[], int last )
+{
+	if (last==0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int isFull( int L[], int last )
+{
+	if (last == MaxList-1)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+  
+void printList( int L[], int last )
+{
+ int i;
+ for ( i = 0; i < last; ++i)
+   printf("%3d ", L[i]);
+ printf("\n");
+}
+
+
+int main()
+{
+ int x, i;
+
+ srand( 3 );
+
+ if (isEmpty(L, last))
+   printf("1 empty\n");
+ else
+   printf("1 notempty\n");
+
+ if (isFull(L, last))
+   printf("1 full\n");
+ else
+   printf("1 notfull\n");
+
+
+ x = rand() % 100;
+ insertEnd( L, &last, x );  
+ printList( L, last );
+ x = rand() % 100;
+ insertEnd( L, &last, x );  
+ printList( L, last );
+
+
+ if (isEmpty(L, last))
+   printf("2 empty\n");
+ else
+   printf("2 notempty\n");
+
+ if (isFull(L, last))
+   printf("2 full\n");
+ else
+   printf("2 notfull\n");
+
+ for (i = 0; i < 5; ++i)
+  {
+   x = rand() % 100;
+   insertEnd( L, &last, x );  
+   printList( L, last );
+  }
+ for (i = 0; i < 5; ++i)
+  {
+   x = rand() % 100;
+   insertFront( L, &last, x );  
+   printList( L, last );
+  }
+
+ if (isEmpty(L, last))
+   printf("3 empty\n");
+ else
+   printf("3 notempty\n");
+
+ if (isFull(L, last))
+   printf("3 full\n");
+ else
+   printf("3 notfull\n");
+
+ return 0;
+}

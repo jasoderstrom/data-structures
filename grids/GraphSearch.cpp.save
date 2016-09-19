@@ -1,0 +1,396 @@
+/*  Author:      Justin Soderstrom
+    Class:       CSC-300
+    Date:        November 18, 2015
+    Assignment:  Create a undirected adjacency matrix through an input file on the command line, including weights.
+                 Perform a Depth First Search (DFS), Breadth First Search (BFS), DFS spanning tree (DFS-ST), and
+                 BFS spanning tree (BST-ST) search based on user input on the command line.
+*/
+
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+using namespace std;
+
+class graph
+{
+        public:
+                graph();
+                void undirectedAdjMatrix(char *fname);
+                void breadthFirstSearch(int start2);
+                void breadthFirstSearchST(int start2);
+                void depthFirstSearch(int start2);
+                void depthFirstSearchST(int start2);
+                int queueRemove( int queue[], int len );
+                void dijkstra(int start2);
+                void printMatrix();
+        private:
+                int A[100][100];
+                int N;                  //N x N matrix
+};
+
+graph::graph()
+{
+        int r, c;
+        for(r = 0; r < 100; r++)
+        {
+                for (c = 0; c < 100; c++)
+                        A[r][c] = 0;
+        }
+}
+
+
+void graph::undirectedAdjMatrix( char *fname )
+{
+        int edges, r, c, i, weight; //r = row
+
+        ifstream fin;
+
+        fin.open( fname );
+
+        fin >> N;
+        fin >> edges;
+        for (i = 0; i < edges; i++)
+        {
+                fin >> r >> c >> weight;
+                A[r][c] = weight;
+                A[c][r] = weight;
+        }
+}
+
+void graph::printMatrix()
+{
+        int r, c;
+
+        cout << "  ";
+
+        for (r = 1; r<=N; r++)  //prints out visual "To" row
+        {
+                cout << r << " ";
+        }
+
+        cout << endl;
+
+        cout << "  ";
+
+        for (r = 1; r <= N; r++)
+        {
+                cout << "- ";
+        }
+
+        cout << endl;
+
+        for (r = 1; r <= N; r++)
+        {
+                cout << r << "|";
+                for(c = 1; c <= N; c++)
+                        cout << A[r][c] << " ";
+                cout << endl;
+        }
+}
+
+int graph::queueRemove( int queue[], int len )
+{
+        int i;
+        int front = 0;
+        if(queue[0] == 0)
+        {
+                cout << "Sorry, can't remove a value from an empty queue!" << endl;
+        }
+        else
+        {
+                front = queue[0];
+
+                for(i = 0; i <= len; i++)
+                {
+                        queue[i] = queue[i+1];
+                }
+        }
+
+        return front;
+}
+
+void graph::breadthFirstSearch(int start2)
+{
+        int mark[100] = {0};
+        int queue[100] = {0};
+
+        int r, i;
+        int len = 0;
+
+        queue[len] = start2;
+        len++;
+
+        while( len != 0 )
+        {
+                r = queueRemove(queue, len);
+                len--;
+
+                if(mark[r] != 1)
+                {
+                        cout << r << " ";
+                        mark[r] = 1;
+                        for(i = 1; i <= N; i++)
+                        {
+                                if( A[r][i] != 0 && mark[i] != 1)
+                                {
+                                      queue[len] = i;
+                                      len++;
+                                }
+                        }
+                }
+        }
+}
+
+void graph::breadthFirstSearchST(int start2)
+{
+        int mark[100] = {0};
+        int queue[100] = {0};
+        int edge[100] = {0};
+
+        int r, i;
+        int len = 0;
+
+        queue[len] = start2;
+        len++;
+
+        while( len != 0 )
+        {
+                r = queueRemove(queue, len);
+                len--;
+
+                if(mark[r] != 1)
+                {
+                        mark[r] = 1;
+                        for(i = 1; i <= N; i++)
+                        {
+                                if( A[r][i] != 0 && mark[i] != 1 && edge[i] != 1)
+                                {
+                                      cout << r << "-" << i << " ";
+                                      edge[i] = 1;
+                                      queue[len] = i;
+                                      len++;
+                                }
+                        }
+                }
+
+        }
+
+}
+
+void graph::depthFirstSearch(int start2)
+{
+        int mark[100] = {0};
+        int stack[100] = {0};
+
+        int r, i;
+        int top = 0;
+
+        stack[top] = start2;
+
+        while( top != -1 )
+        {
+                r = stack[top];
+                stack[top] = 0;
+                top--;
+
+                if(mark[r] != 1)
+                {
+                        cout << r << " ";
+                        mark[r] = 1;
+                        for (i = N; i >= 1; i--)
+                        {
+                                if( A[r][i] != 0 && mark[i] != 1)
+                                {
+                                        top++;
+                                        stack[top] = i;
+                                }
+                        }
+                }
+        }
+}
+
+void graph::depthFirstSearchST(int start2)
+{
+        int mark[100] = {0};
+        int stack[100] = {0};
+        int stack2[100] = {0};
+
+        int r;
+        int i = 0;
+        int top = 0;
+        int top2 = 0;
+        int from = 0;
+
+        stack[1] = start2;
+        top++;
+
+        while( top != 0 )
+        {
+                r = stack[top];
+
+                if(top2 != 0)
+                {
+                        from = stack2[top2];
+                        top2--;
+                }
+                if(mark[r] != 1)
+                {
+                        mark[r] = 1;
+                        for (i = N; i >= 0; i--)
+                        {
+                                if( A[r][i] != 0 && mark[i] != 1)
+                                {
+                                        stack[top] = i;
+                                        top++;
+                                        top2++;
+                                        stack2[top2] = r;
+                                }
+                        }
+                        if(from > 0)
+                        {
+                                cout << from << "-" << r << " ";
+                        }
+                }
+                top--;
+        }
+}
+
+int graph::dijkstraDistance(int distance[], int known[], int v)
+{
+        int i;
+        int count = 0;
+
+      //v = smallest unknown distance vertex
+      for(i = 1; i<=N; i++)
+      {
+          if(A[v][i] != 0 && known[i] != 1)
+          {
+               distance[i] = A[v][i];
+               count++;
+          }
+
+       }
+
+       if( count != 0 )
+       {
+          for(i=0; i<100; i++)
+          {
+            if(distance[i] != 0 && distance[i] < v)
+            {
+                  v = i;
+            }
+          }
+       }
+       else
+       {
+                v = NULL;
+       }
+
+
+        return v;
+}
+
+void graph::dijkstra(int start2)
+{
+        int known[100] = {0};
+        int distance[100] = {0};
+
+        distance[start2] = 0;
+
+        int v = start2;
+        int i;
+        int w;
+        int newDistance;
+
+        for(;;)
+        {
+                v = dijkstraDistance(distance, known, v); //smallest unknown distance vertex
+                if(v == NULL)
+                {
+                        break;
+                }
+
+                known[v] = 1;
+
+                for(i = 0; i<100; i++)
+                {
+                        if(distance[i] != 0 && known[i] != 1)
+                        {
+                                if((distance[v] + distance[i]) < distance[i])
+                                {
+                                        newDistance = (distance[v
+                                }
+                        }
+                }
+        }
+
+}
+
+int main( int argc, char *argv[] )
+{
+        if (argc != 2)
+        {
+                cout << "Error: must supply filename " << endl;
+                exit(1);
+        }
+
+        int start1;
+        graph u;
+
+        cout << endl;
+        cout << "Undirected Adjacency Matrix:" << endl;
+
+        u.undirectedAdjMatrix( argv[1] );
+        u.printMatrix();
+
+        cout << endl;
+
+        //BFS
+
+        cout << "Breadth First Search (BFS) start: ";
+        cin >> start1;
+
+        cout << "Breadth First Search results: ";
+        u.breadthFirstSearch(start1);
+        cout << endl << endl;
+
+        //DFS
+
+        cout << "Depth First Search (DFS) start: ";
+        cin >> start1;
+
+        cout << "Depth First Search results: ";
+        u.depthFirstSearch(start1);
+        cout << endl << endl;
+
+
+        //BFSST
+
+        cout << "Breadth First Search Spanning Tree (BFSST) start: ";
+        cin >> start1;
+
+        cout << "Breadth First Search ST results: ";
+        u.breadthFirstSearchST(start1);
+        cout << endl << endl;
+
+
+        //DFSST
+
+        cout << "Depth First Search Spanning Tree (DFSST) start: ";
+        cin >> start1;
+
+        cout << "Depth First Search ST results: ";
+        u.depthFirstSearchST(start1);
+        cout << endl << endl;
+
+        //dijkstra
+
+        cout << "Dijkstra's start: ";
+        cin >> start1;
+
+        cout << "Dijkstra results: ";
+        u.dijkstra(start1);
+        cout << endl << endl;
+
+        return 0;
+}

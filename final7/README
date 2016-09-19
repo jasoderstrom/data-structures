@@ -1,0 +1,70 @@
+Author: 	Justin Soderstrom
+Class:  	CSC-300
+Assignment:	Final7
+Date:		December 9, 2015
+
+Program Files:  soderstromFinal.cpp
+		APSP.cpp
+		stringSearch.cpp
+
+Test Files:	text
+		pattern
+		graphTest
+
+HOW TO USE:
+		soderstromFinal.cpp
+		----------------------------------------------------------------------------------------------------------------------------------- 
+		
+		This program contains and demonstrates multiple functions. The functions included in the program are the
+		Unique List, IP Range, and all of the Recursive Operations functions. To run the program, please issue the following commands:
+
+		g++ soderstromFinal.cpp
+		./a.out
+
+		After the program begins, follow all of the onscreen prompts. At the start of each function, the program will indicate what function
+		is being executed. For example, you will see "Starting Unique List Section..." before being prompted to enter the amount of unique
+		numbers to generate.
+
+		Please note that on each function, there is a result indicating the time to run the function. Usually, the time result is zero. This
+		is not because the program is broken, but that the program finishes in under a second. Use the amount of comparisons/attempts as an 
+		accurate estimate of the function's runtime.
+
+		Also note that the I start with an index of 0 instead of 1 for the Fibonacci sequence. In other words, I start with 0 1 1 2 3 instead
+		of 1 1 2 3. Therefore, my Fibonacci(2) is 1 instead of 2, etc.
+
+		APSP.cpp
+		-------------------------------------------------------------------------------------------------------------------------------------
+
+		This program demonstrates the all-points-shortest-path (APSP) on a given graph using the Floyd-Warshall Algorithm. The program requires
+		a graph file which uses the standard graph building conventions that we have used in class. The premade graph file in this directory
+		is called graphTest, though other test files can be used. To run the program, please issue the following commands:
+
+		g++ APSP.cpp
+		./a.out graphTest 
+
+		OR
+
+		./a.out <graph_file> (insert custom graph file)
+
+		After the program begins, follow all of the onscreen prompts. At the start of the program, you will be prompted for a starting and ending
+		vertex. This is used to display the shortest path from node U to V. After the prompt, a graph matrix will be displayed to show the 
+		original graph matrix before the Floyd-Warshall Algorithm is applied. After the graph matrix is the Floyd-Warshall matrix, which displays
+		the smallest cost from two vertices (From vertex = row, To vertex = column). Finally, the shortest path from node U to V is displayed.
+
+		stringSearch.cpp
+		---------------------------------------------------------------------------------------------------------------------------------------
+
+		This program demonstrates the string search function, which finds substrings given a text file and pattern file. The text and pattern
+		data files have been premade to demonstrate the string search's functionality. To run the program, please issue the following commands:
+
+		g++ stringSearch.cpp
+		./a.out text pattern
+
+		OR
+
+		./a.out <text_file> <pattern_file> (insert a custom text and pattern for searching)
+
+		After the program starts, matches will begin to populate the screen with the location and the starting index of the match. After all 
+		of the matches are found, the total amount of matches found will be displayed. If no matches are found, then the total matches displayed
+		will be zero. Feel free to edit the text and pattern files to test different search strings. Otherwise, create your own files to test
+		the function, using the syntax on the commandline as shown above.
